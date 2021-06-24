@@ -1,5 +1,4 @@
 # Import Flask modules
-import re
 from flask import Flask, render_template
 # Create an object named app 
 app = Flask(__name__)
@@ -17,7 +16,6 @@ def header() :
     names = ['marcus', 'stephaine', 'marie', 'thomas', 'boyka']
     return render_template('body.html', object = names)
 
-# run this app in debug mode on your local.
 if __name__ == '__main__' :
-    # app.run(debug = True)
-    app.run(host=‘0.0.0.0’, port=80)
+    # app.run(debug = True) # Kodu localda calistirmamizi saglar
+    app.run(host = "0.0.0.0", port=80) # Kodun EC2 makinede calistirmamizi saglar

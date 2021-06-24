@@ -1,6 +1,4 @@
 # Import Flask modules
-from re import template
-import re
 from flask import Flask, render_template, redirect, url_for
 # Create an object named app 
 app = Flask (__name__)
@@ -80,6 +78,9 @@ def evens() :
 # Create a folder named `static` under `hands-on/flask-03-handling-routes-and-templates-on-ec2-linux2` folder and create a text file named `mytext.txt` with *This is a text file in static folder* content.
 
 # run this app in debug mode on your local. Do not forget to change debug mode to publish mode before you push to the Github repo
+
+
+# run this app in debug mode on your local.
 if __name__ == '__main__' :
-    # app.run(debug = True) # Kodu localda calistirmamizi saglar
-    app.run(host=‘0.0.0.0’, port=80) # Kodun EC2 makinede calistirmamizi saglar.
+    # app.run(debug = True)
+    app.run(host='0.0.0.0', port=80)
