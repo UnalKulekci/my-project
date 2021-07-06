@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  This CloudFormation Template was written for running Kittens Carousel Static Website on EC2.
+  Kittens Carousel Static Website will be deployed on Amazon Linux 2 (ami-026dea5602e368e96) EC2 Instance with custom security group which allows http connections on port 80 and ssh port 22 from anywhere.
+  Kittens Carousel Static Website is downloaded from my Public Github repository, then deployed on Apache Web Server.
+  
+Resources:
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP for apacheweb server and SSH for secure connection.
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0 # 222.33.444.44/45 --> Sadece buradan gelen reguestlari alir o zaman . 
+  WebServerHost: # LogicalID normalde boyle cikiyor isim olarak biz ne verirsek o olur.
+    Type: AWS::EC2::Instance
+    Properties:
+       # AdditionalInfo: "String"  # Sirket ici bilgi vermek icin kullaniliyor. 
+       # Affinity: "String" # Instance decicated host ile ilgiliyse kullaniliyor. Siliyoruz.
+      # AvailabilityZone: "String" # Farkli bir az'dan baglanmasi istiyorsak kullaniyoruz.
+      # BlockDeviceMappings: # Volumlerla alakali.Volume tiplerinden ebs volumlerden attached, yonlerdirme olacak buradan yapiliyor.
+        #BlockDeviceMappings
+      # CpuOptions: # Instance'in cpu core degerleri teknik detaylar genelde amazon bize ne sagliyorsa onu default seciyoruz.
+        #CoreCount: Number
+       # ThreadsPerCore: Number
+      #CreditSpecification: # Kacirdim.
+       # CPUCredits: "Number"
+      #DisableApiTermination: false # Eger bunu true yaparsak birisi instance konsoldan terminate edemez.Yanlislikla silmenin vs onunce gecmek icin.
+      #EbsOptimized: false # Volumlerda alakali..
+      #ElasticGpuSpecifications: # Elastic cpu unit edeceksek buradan yapiyoruz instancemiza.
+       # ElasticGpuSpecifications
+      #ElasticInferenceAccelerators: # Cpu yu baglarsak onun hizlandirilmasiyla ilgili bir ozellik.
+       # ElasticInferenceAccelerators
+      #EnclaveOptions: # KACIRDIM AMA TEKNIK BIR DETAY.
+       # Enabled: false
+      #HibernationOptions: # Soylemedi hoca ama kullanmayacagiz.
+       # Configured: false
+      #HostId: "String" # Eger Affinity secersek decicated host'un id sini buraya yaziyoruz.
+      #HostResourceGroupArn: "String" # AmazON Resoruce Number
+      # IamInstanceProfile: "String" # Bir IAM instance uzerinde create edeceksek buraya onun adini yaziyorum.
+      ImageId: ami-0ab4d1e9cf9a1215a # Konsola geldigimizde launch instance dedigimizde karsimiza gelen IAM numarasini yaziyrouz. Chose IAM KISMINDA.
+      InstanceInitiatedShutdownBehavior: "String" # Shut down dedigimiz zaman instance stop mu terminate mi etsin . Sadece stop yada terminate degerleri ile calisir. Shut down behavoir konsolda default stop ayalidir.
+      InstanceType: t2.micro
+      #Ipv6AddressCount: Number
+      #Ipv6Addresses:
+       # Ipv6Addresses
+      #KernelId: "String"
+      KeyName: nvirginia # Instance launch ederken kullanidigimiz pem dosyasinin adini buraya yaziyoruz. Mesela ben nvirginia regionda nvirginia.pem isimli dosyayi kullaniyorum.
+      #LaunchTemplate:
+       # LaunchTemplateId: "String"
+        #LaunchTemplateName: "String"
+        #Version: "String"
+      #LicenseSpecifications:
+       # LicenseSpecifications
+     # Monitoring: String # dEFAULT DEGERIMIZ 5 DK'DIR.
+      #NetworkInterfaces: Kendi olusturdugmuz network altyapisi ile kullanacaksak bunu kullaniriz.
+        #NetworkInterfaces
+      #PlacementGroupName: "String"
+     # PrivateIpAddress: "String" Default VPC kullandigim icin ihtiycamiz yok
+      # RamdiskId: "String" Baska bir Ramdisk kullanmadigim icin ihtiyacim yok
+      SecurityGroupIds: # EC2 'nun calisacagi security grup yaziyoruz.
+        !Ref WebServerSecurityGroup # Yukarida degeri referans alacak basina yazdigmiz " !Ref " ifadesi sayesinde , burasi bence onemli.
+      #SecurityGroups:
+       # SecurityGroups
+      # SourceDestCheck: false # Sonraki derslerde ogrenecegiz.
+      # SsmAssociations: Amazonun system management i ile kullanmayacagimiz icin gerek yok.
+        #SsmAssociations
+      # SubnetId: "String" Default subnet id kullanacagimiz icin gerek yok
+      Tags: # Instace olusturuken yaptigimiz tagleme isleminin aynisini burada yapacagiz. Konsolda 6. asama.
+       - Key: Name
+         Value: Web Server of ${AWS::StackName} Stack
+       # Tenancy: "String" Decicated yada hardware kiralagimiz zaman instance onun uzerinde calisacaksa kullaniyoruz
+      UserData: "String" # launc instance 3 . asama user data bolumune yazacagimiz seyleri buraya yaziyoruz. Yani ec2 run olurken otomatik yapmasini istedigmiz guncellemeleri indirmesini istedigmiz dosyalari vs yaziyoruz komutlarini.
+        Fn::Base64 :
+        !Sub | # Yazilis formati bu sekilde canim sorgulama iste :) alt bu ve ust satir yani.
+          #! /bin/bash
+          yum update -y
+          yum install httpd -y
+          cd /var/www/html
+      Volumes:
+        Volumes
+
+Outputs:
