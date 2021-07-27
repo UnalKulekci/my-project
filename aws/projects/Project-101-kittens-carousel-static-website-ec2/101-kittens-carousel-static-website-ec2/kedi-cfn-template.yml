@@ -51,7 +51,7 @@ Resources:
       #Ipv6Addresses:
        # Ipv6Addresses
       #KernelId: "String"
-      KeyName: n.virginia # Instance launch ederken kullanidigimiz pem dosyasinin adini buraya yaziyoruz. Mesela ben nvirginia regionda nvirginia.pem isimli dosyayi kullaniyorum.
+      KeyName: nvirginia # Instance launch ederken kullanidigimiz pem dosyasinin adini buraya yaziyoruz. Mesela ben nvirginia regionda nvirginia.pem isimli dosyayi kullaniyorum.
       #LaunchTemplate:
        # LaunchTemplateId: "String"
         #LaunchTemplateName: "String"
@@ -96,7 +96,7 @@ Resources:
 
 Outputs:   #STACK OLUSTUGUNDA ORTAYA CIKTIDIR.BURADA SIMDI ONU YONLENDIRECEGIZ.
   WebsiteURL :
-  Value: !Sub
-    - http://${PublicAddress}
-    - PublicAddress : !GetAtt WebServerHost.PublicDnsName
-  Description: Kittens Carousel App URL
+    Value: !Sub
+      - http://${PublicAddress}
+      - PublicAddress : !GetAtt WebServerHost.PublicDnsName
+    Description: Kittens Carousel App URL
