@@ -14,7 +14,7 @@ Parameters:
 
 Resources:
   WebServerSecurity-Portfolio-6 :
-    Type: AWS::ElastiCache::SecurityGroup
+    Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable HTTP for Flask Web Server and SSH port to secure reach to my EC2
       SecurityGroupIngress:
