@@ -1,14 +1,6 @@
-
-# keyname parametresini sil . Sec Group Ayarlari en son bitirmeden tekrar bi ustunden gecersin
-# Launch template ayarlari tamam gene ayni sekilde bitirmeden ustunden gecersin
-# Elastic Load Balancer ve Auto Scaling Group Ayarlamalari Yapacaksin !!!!!
-# Template en basta description eklemeyi ve user datayi check etmeyi unutma !!!!
-
-
-
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
-  
+  .....
 Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
@@ -59,7 +51,7 @@ Resources:
         - Key: Name
           Value: !Sub Web Server of ${ AWS::Stackname } Stack
 
-#Elastic Load Balancer Genel Ozellikleri
+#Elastic Load Balancer Genel Ozellikleri duzenlenecek
   ElasticLoadBalancer-Unal:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -79,7 +71,7 @@ Resources:
         Tags
       Type: "String"
 
-#Elactic Load Balancer Listener
+#Elactic Load Balancer Listener duzenlenecek
   LogicalID:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -94,7 +86,7 @@ Resources:
       Protocol: "String"
       SslPolicy: "String"
 
-#Elastic Load Balancer Target Group
+#Elastic Load Balancer Target Group duzenlenecek
   TargetGroup-Unal:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -122,7 +114,7 @@ Resources:
       UnhealthyThresholdCount: Number
       VpcId: "String"
 
-#Auto Scaling Group 
+#Auto Scaling Group  duzenlenecek
   AutoScalingGroup-Unal:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
