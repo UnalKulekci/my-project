@@ -1,0 +1,176 @@
+
+# keyname parametresini sil . Sec Group Ayarlari en son bitirmeden tekrar bi ustunden gecersin
+# Launch template ayarlari tamam gene ayni sekilde bitirmeden ustunden gecersin
+# Elastic Load Balancer ve Auto Scaling Group Ayarlamalari Yapacaksin !!!!!
+# Template en basta description eklemeyi ve user datayi check etmeyi unutma !!!!
+
+
+
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  
+Resources:
+  SecurityGroup-Unal :
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP for Flask Web Server and SSH port to secure reach to my EC2
+      SecurityGroupIngress:
+        - IpProtocol: tcp 
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp 
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  
+  
+  LaunchTemplate-Unal:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+        ImageId: "ami-0c2b8ca1dad447f8a"
+        InstanceType: "t2.micro"
+        KeyName: "n.virgina-keypair"
+        SecurityGroupIds:
+          - !Ref SecurityGroup-Unal
+          UserData: !Base64 |
+          #!/bin/bash 
+          yum update -y
+          yum install -y httpd
+          yum install phyton3
+          pip3 install flask 
+          cd /home/ec2-user
+          wget https://raw.githubusercontent.com/Unal-223010/my-project/main/aws/projects/Project-004-Phonebook-Application/phonebook-app.py
+          mkdir templates
+          cd templates
+          wget https://raw.githubusercontent.com/Unal-223010/my-project/main/aws/projects/Project-004-Phonebook-Application/templates/index.html
+          wget https://raw.githubusercontent.com/Unal-223010/my-project/main/aws/projects/Project-004-Phonebook-Application/templates/delete.html
+          wget https://raw.githubusercontent.com/Unal-223010/my-project/main/aws/projects/Project-004-Phonebook-Application/templates/add-update.html
+          cd .. 
+          phyton3 phonebook-app.py
+      LaunchTemplateName: "Phonebook"
+      TagSpecifications:
+        - Key: Name
+          Value: !Sub Web Server of ${ AWS::Stackname } Stack
+
+#Elastic Load Balancer Genel Ozellikleri
+  ElasticLoadBalancer-Unal:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name : ApplicationLoadBalancer
+      IpAddressType: "IPv4"
+      LoadBalancerAttributes:
+        LoadBalancerAttributes
+      Name: "String"
+      Scheme: "String"
+      SecurityGroupIds:
+        - !Ref SecurityGroup-Unal
+      SubnetMappings:
+        SubnetMappings
+      Subnets:
+        Subnets
+      Tags:
+        Tags
+      Type: "String"
+
+#Elactic Load Balancer Listener
+  LogicalID:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      AlpnPolicy:
+        AlpnPolicy
+      Certificates:
+        Certificates
+      DefaultActions: # Required
+        DefaultActions
+      LoadBalancerArn: "String" # Required
+      Port: Number
+      Protocol: "String"
+      SslPolicy: "String"
+
+#Elastic Load Balancer Target Group
+  TargetGroup-Unal:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: false
+      HealthCheckIntervalSeconds: Number
+      HealthCheckPath: "String"
+      HealthCheckPort: "String"
+      HealthCheckProtocol: "String"
+      HealthCheckTimeoutSeconds: Number
+      HealthyThresholdCount: Number
+      Matcher:
+        GrpcCode: "String"
+        HttpCode: "String"
+      Name: "String"
+      Port: Number
+      Protocol: "String"
+      ProtocolVersion: "String"
+      Tags:
+        Tags
+      TargetGroupAttributes:
+        TargetGroupAttributes
+      TargetType: "String"
+      Targets:
+        Targets
+      UnhealthyThresholdCount: Number
+      VpcId: "String"
+
+#Auto Scaling Group 
+  AutoScalingGroup-Unal:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: "PhoneBook-App"
+      AvailabilityZones:
+        us-east-1a
+        us-east-1b
+        us-east-1c
+        us-east-1d
+        us-east-1e
+        us-east-1f
+      
+      CapacityRebalance: false
+      Context: "String"
+      Cooldown: "String"
+      
+      DesiredCapacity: "2"
+      HealthCheckGracePeriod: Number
+      HealthCheckType: "String"
+      InstanceId: "String"
+      LaunchConfigurationName: "String"
+      LaunchTemplate:
+        LaunchTemplateId: "String"
+        LaunchTemplateName: "String"
+        Version: "String"
+      LifecycleHookSpecificationList:
+        LifecycleHookSpecificationList
+      LoadBalancerNames:
+        LoadBalancerNames
+      MaxInstanceLifetime: Number
+      MaxSize: "String" # Required
+      MetricsCollection:
+        MetricsCollection
+      MinSize: "String" # Required
+      MixedInstancesPolicy:
+      NewInstancesProtectedFromScaleIn: false
+      NotificationConfigurations:
+        NotificationConfigurations
+      PlacementGroup: "String"
+      ServiceLinkedRoleARN: "String"
+      Tags:
+        Tags
+      TargetGroupARNs:
+        TargetGroupARNs
+      TerminationPolicies:
+        TerminationPolicies
+      VPCZoneIdentifier:
+        VPCZoneIdentifier
+        
+  
+Outputs:
